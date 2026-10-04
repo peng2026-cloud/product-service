@@ -1,42 +1,32 @@
 # Product Service
 
-The Product Service is a simple web service built using Rust and the Warp web framework. It is responsible for serving the product catalog, which includes a list of products that can be fetched via a RESTful API.
+The Product Service is a simple web service built using Python and the Flask web framework. It serves the product catalog: `GET /products` returns a list of three products.
+
+It was rewritten from Rust to Python in Lab 3, because Azure App Service supports Python but not Rust. The endpoint and the data are the same as the Rust version.
 
 ## Requirements
 
-- Rust (latest stable version) and Cargo, installed below
-- Start inside the repository's `product-service` directory. The main guide already takes you there.
+- Python 3.12 or later
 
 ## Setup Instructions
 
-1. Update the package list and install the build tools:
+1. Create a virtual environment and install the dependencies from `requirements.txt`:
 
    ```bash
-   sudo apt update
-   sudo apt install build-essential
+   python -m venv .venv
+   .venv/bin/python -m pip install -r requirements.txt
    ```
 
-2. Install Rust and accept the default installation:
+   On Windows, use `.venv\Scripts\python` instead of `.venv/bin/python`.
+2. Start the service:
 
    ```bash
-   curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh
+   .venv/bin/python app.py
    ```
 
-3. Load the Rust tools into this terminal:
+   The service listens on port `3030` by default. To use another port, set `PORT` in the environment or in a `.env` file (see `.env.example`).
 
-   ```bash
-   source "$HOME/.cargo/env"
-   ```
-
-4. Build and start the service:
-
-   ```bash
-   cargo run
-   ```
-
-   Keep this terminal open. Cargo prints build output; the application itself does not print a listening message. Do not start a second copy from the main guide.
-
-The service binds to `0.0.0.0:3030` (all IPv4 interfaces). On the VM, test `http://localhost:3030/products`. From your laptop, use `http://<VM-PUBLIC-IP>:3030/products` with port 3030 allowed by the NSG. VS Code port forwarding is an optional alternative for accessing a forwarded port through your laptop's localhost.
+On Azure App Service (Python runtime), the platform installs `requirements.txt` and starts `app.py` with gunicorn, so the steps above are only for local runs.
 
 ## Testing
 
